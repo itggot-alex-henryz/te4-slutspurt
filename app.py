@@ -10,7 +10,6 @@ cur = conn.cursor()
 def before_first_request():
     session['lang'] = "swe"
 
-
 @app.route('/switch', methods=['POST'])
 def language_switch():
     if session['lang'] == "swe":
@@ -25,14 +24,16 @@ def index():
 
 @app.route('/fruits')
 def fruits():
-    return render_template("fruits_{}.html".format(session['lang']))
+    cur.execute("SELECT * FROM fruits")
+    fruitlist = cur.fetchall()
+    return render_template("fruits_{}.html".format(session['lang']), fruits=fruitlist)
 
 @app.route('/fruit/<name>')
 def fruit(name=None):
-    if name == None:
-        return "<h1>no fruit :(</h1>"
-    else:
-        return "<h1>{}</h1>".format(name)
+    cur.execute("SELECT * FROM fruits WHERE name='{}'".format(name))
+    fruitdata = cur.fetchone()
+    print(fruitdata)
+    return  render_template("fruit_{}.html".format(session['lang']), fruit=fruitdata)
 
 if __name__ == '__main__':
     app.secret_key = os.urandom(24)

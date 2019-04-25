@@ -11,15 +11,16 @@
     <form action="/switch" method="POST">
         <button>Swedish</button>
     </form>
-    <ul>
-        <li>
-            <a href="home.html">Home</a>
-        </li>
-        <li>
-            <a href="about.html">About</a>
-        </li>
-    </ul>
     
     <h1>Fruits!</h1>
+
+    <ul>
+        {% for i in fruits %}
+        <li>
+            <a href="/fruit/{{i[1]}}">{{i[1]}}</a>
+            <p>Ripeness: {{i[2]}}</p>
+        </li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
