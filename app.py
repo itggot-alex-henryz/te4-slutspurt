@@ -29,7 +29,7 @@ def home():
 def search():
     print(request.form)
     try:
-        cur.execute("SELECT username, created_on FROM users WHERE username=" + request.form['searchbar'])
+        cur.execute("SELECT username, created_on FROM users WHERE username LIKE '{}'".format(request.form['searchbar']))
         data = cur.fetchall()
         print(request.form['searchbar'])
         return render_template("index_{}.html".format(session['lang']), data=data)
