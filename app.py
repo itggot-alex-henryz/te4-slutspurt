@@ -50,15 +50,7 @@ def comment():
 def comments():
     cur.execute("SELECT * FROM comments")
     comments = cur.fetchall()
-    for c in comments:
-        ok = """<div style="padding-top: 5px;">
-                <div style="border-style: solid; border-width: 1px;">
-                <h3>{}</h3>
-                {}
-                <p>Gjord av:{}</p>
-                </div>
-        </div>""".format(c[3], c[2],c[1], c[1])
-    return ok
+    return render_template("comments_{}.html".format(session['lang']), comments=comments)
 
 @app.route('/deletecomment', methods=['POST'])
 def deleteComment():
