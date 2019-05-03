@@ -12,7 +12,32 @@
         <button>Engelska</button>
     </form>
 
-    <a href="/login">Logga in</a>
-    
+    {% if session['loggedIn'] %}
+        <p>{{session['currentUser']}}</p>
+        <a href="/comment">Lämna Kommentar</a>
+        <form action="{{url_for('logout')}}" method="POST">
+            <input type="submit" value="Logga ut">
+        </form>
+    {% else %}
+        <a href="/login">Logga in</a>
+        <a href="/register">Registrera</a>
+    {% endif %}
+    <a href="/comments">Kommentarer</a>
+    <form action="{{url_for('search')}}" method="POST">
+        <input type="text" name="searchbar">
+        <input type="submit" value="Sök">
+    </form>
+
+    {% if data %}
+        {% for i in data %}
+        <ul>
+            <li>
+            {% for j in i %}
+            {{j}}
+            {% endfor %}
+            </li>
+        </ul>
+        {% endfor %}
+    {% endif %}
 </body>
 </html>

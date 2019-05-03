@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hej</title>
+</head>
+<body>
+    <h1>Gör kommentar!</h1>
+    {% if session['loggedIn'] %}
+    <form action="{{url_for('comment')}}" method="POST">
+        <input type="text" name="title" placeholder="Title">
+        <input type="text" name="comment" placeholder="Comment">
+        <input type="submit" value="Submit">
+    </form>
+    {% else %}
+    <a href="/login">Logga in </a><p>för att göra kommentarer</p>
+    {% endif %}
+</body>
+</html>
