@@ -9,12 +9,20 @@ cur = conn.cursor()
 
 @app.before_first_request
 def before_first_request():
+    """
+    Handles everything that is needed before the site is rendered.
+    """
     session['lang'] = "swe"
     session['loggedIn'] = False
     session['currentUser'] = None
 
 @app.route('/switch', methods=['POST'])
 def language_switch():
+    """ 
+    Handles the language switching by changing the session['lang'] to other language
+
+    """
+
     if session['lang'] == "swe":
         session['lang'] = "eng"
     elif session['lang'] == "eng":
@@ -23,11 +31,16 @@ def language_switch():
 
 @app.route('/')
 def home():
+    """
+    Renders the initial index page.
+    """
     return render_template('index_{}.html'.format(session['lang']))
 
 @app.route('/search', methods=['POST'])
 def search():
-    print(request.form)
+    """
+    Handles the searches in the application.
+    """
     try:
         cur.execute("SELECT username, created_on FROM users WHERE username LIKE '{}'".format(request.form['searchbar']))
         data = cur.fetchall()
@@ -38,6 +51,9 @@ def search():
 
 @app.route('/comment', methods=['GET', 'POST'])
 def comment():
+    """
+    GET and POST for both the website rendering and the form submission.
+    """
     if request.method == 'POST':
         comment = request.form['comment']
         command = "INSERT INTO comments (username, comment, title) VALUES ('{0}', '{1}', '{2}')".format(session['currentUser'], comment, request.form['title'])
@@ -48,17 +64,26 @@ def comment():
 
 @app.route('/comments')
 def comments():
+    """
+    Displays all comments that have been made.
+    """
     cur.execute("SELECT * FROM comments")
     comments = cur.fetchall()
     return render_template("comments_{}.html".format(session['lang']), comments=comments)
 
 @app.route('/deletecomment', methods=['POST'])
 def deleteComment():
+    """
+    Deletes specific comment.
+    """
     cur.execute("DELETE FROM comments WHERE id={}".format(request.form['id']))
     return redirect('/comments')
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
+    """
+    Allows a user to register an account.
+    """
     if request.method == 'POST':
         command = "INSERT INTO users (username, password, created_on) VALUES ('{0}', '{1}', CURRENT_TIMESTAMP)".format(request.form['username'], request.form['password'])
         cur.execute(command)
@@ -68,6 +93,10 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    Allows a known user to login.
+    This also starts a session with the current logged in user.
+    """
     if request.method == 'POST':
         try:
             cur.execute("SELECT * FROM users WHERE username='{}'".format(request.form['username']))
@@ -85,6 +114,9 @@ def login():
 
 @app.route('/logout', methods=['POST'])
 def logout():
+    """
+    Allows a logged in user to logout.
+    """
     session.pop('currentUser', None)
     session.pop('loggedIn', False)
     return redirect('/')
