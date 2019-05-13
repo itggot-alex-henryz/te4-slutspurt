@@ -3,9 +3,15 @@ import psycopg2
 from flask import Flask, render_template, session, redirect, request, url_for
 app = Flask(__name__)
 
-conn = psycopg2.connect(host="localhost",database="slutspurt", user="postgres", password="docker")
-conn.autocommit = True
-cur = conn.cursor()
+"""
+.. module:: app
+   :platform: Unix, Windows
+   :synopsis: A useful module indeed.
+
+.. moduleauthor:: Alex Henryz
+
+
+"""
 
 @app.before_first_request
 def before_first_request():
@@ -122,5 +128,8 @@ def logout():
     return redirect('/')
 
 if __name__ == '__main__':
+    conn = psycopg2.connect(host="localhost",database="slutspurt", user="postgres", password="docker")
+    conn.autocommit = True
+    cur = conn.cursor()
     app.secret_key = os.urandom(24)
     app.run()

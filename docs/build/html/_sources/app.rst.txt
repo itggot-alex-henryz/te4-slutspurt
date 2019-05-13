@@ -1,0 +1,12 @@
+app module
+==========
+
+.. automodule:: app
+
+useful #1 -- auto members
+=========================
+
+This is something I want to say that is not in the docstring.
+
+.. automodule:: te4-slutspurt.app
+   :members:
